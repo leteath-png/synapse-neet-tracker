@@ -1,0 +1,6 @@
+{
+  "name": "SYNAPSE // NEET 2027",
+  "description": "107 Days • 790 Slots • Zero Backlog — Executive study dashboard inspired by Linear and Apple Health.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
