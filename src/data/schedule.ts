@@ -78,20 +78,16 @@ function formatFullDate(d: Date) {
   return `${dayName}, ${day} ${month} ${year}`;
 }
 
-// 107 Days Schedule strictly shifting forward:
-// Day 01: Tuesday, 13 Oct 2026
-// Day 107: Tuesday, 26 Jan 2027
-// 11 Oct and 12 Oct completely removed so 0 backlogs exist.
+// Exactly 107 Days:
+// Start Date: Tuesday, 13 Oct 2026 (Day 01)
+// End Date: Wednesday, 27 Jan 2027 (Day 107)
 export function generateSynapseSchedule(): DaySchedule[] {
   const days: DaySchedule[] = [];
   const startDate = new Date(2026, 9, 13); // Tue 13 Oct 2026
 
   for (let i = 0; i < 107; i++) {
     const curDate = new Date(startDate);
-    // 13 Oct + 105 days is 26 Jan 2027 (Tuesday)
-    // Day 106 and Day 107 form the final Republic Day double-mock sprint
-    const dayOffset = Math.min(i, 105);
-    curDate.setDate(startDate.getDate() + dayOffset);
+    curDate.setDate(startDate.getDate() + i);
 
     const dayNum = i + 1;
     const dayOfWeek = curDate.getDay(); // 0 = Sun, 1 = Mon, 2 = Tue, 3 = Wed, 4 = Thu, 5 = Fri, 6 = Sat
@@ -103,13 +99,17 @@ export function generateSynapseSchedule(): DaySchedule[] {
     let routineName = '';
     let routineType: 'sun' | 'mwf' | 'tts' | 'mock' = 'tts';
 
-    if (dayNum === 106) {
+    if (dayNum === 105) {
       routineType = 'mock';
       routineName = 'All-India Full Mock Exam 01';
       sequence = ['Physics', 'Chemistry', 'Zoology', 'Botany'];
+    } else if (dayNum === 106) {
+      routineType = 'mock';
+      routineName = 'Republic Day Mock 02 & Error Log';
+      sequence = ['Physics', 'Chemistry', 'Zoology', 'Botany'];
     } else if (dayNum === 107) {
       routineType = 'mock';
-      routineName = 'All-India Full Mock Exam 02 & Republic Day Grand Review';
+      routineName = 'Final Formula Sprint & Mindset Mastery';
       sequence = ['Physics', 'Chemistry', 'Zoology', 'Botany'];
     } else if (dayNum === 35 || dayNum === 70 || dayNum === 98) {
       routineType = 'mock';

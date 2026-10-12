@@ -60,7 +60,7 @@ export const ExecutiveHeader: React.FC<ExecutiveHeaderProps> = ({
                 </span>
               </div>
               <p className="text-[11px] font-mono text-slate-400 tracking-tight">
-                13-Oct-2026 → 26-Jan-2027 • 790 Slots • Zero Backlog
+                13-Oct-2026 → 27-Jan-2027 • 790 Slots • Zero Backlog
               </p>
             </div>
           </div>
