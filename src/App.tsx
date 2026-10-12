@@ -23,10 +23,18 @@ import {
   SlidersHorizontal,
 } from 'lucide-react';
 
-const STORAGE_KEY = 'synapse_state_v1';
+const STORAGE_KEY = 'synapse_state_v2';
 
 export default function App() {
-  // 1. LocalStorage state
+  // Clear any legacy v1 state so Day 01 starts at 0% fresh with zero backlogs
+  useEffect(() => {
+    try {
+      localStorage.removeItem('synapse_state_v1');
+      localStorage.removeItem('neet_2027_completed_slots');
+    } catch {}
+  }, []);
+
+  // 1. LocalStorage state (v2)
   const [completedSlots, setCompletedSlots] = useState<Set<string>>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
@@ -53,9 +61,9 @@ export default function App() {
     return true;
   });
 
-  // Calculate default day: Oct 11, 2026 is Day 1
+  // Calculate default day: strictly Oct 13, 2026 is Day 1
   const calculateDefaultDay = useCallback((): number => {
-    const start = new Date(2026, 9, 11);
+    const start = new Date(2026, 9, 13); // Tue 13 Oct 2026
     const now = new Date();
     const diff = now.getTime() - start.getTime();
     const days = Math.floor(diff / (1000 * 60 * 60 * 24)) + 1;

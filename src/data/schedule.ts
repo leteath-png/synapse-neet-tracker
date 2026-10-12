@@ -78,45 +78,44 @@ function formatFullDate(d: Date) {
   return `${dayName}, ${day} ${month} ${year}`;
 }
 
-// 107 Days generator
+// 107 Days Schedule strictly shifting forward:
+// Day 01: Tuesday, 13 Oct 2026
+// Day 107: Tuesday, 26 Jan 2027
+// 11 Oct and 12 Oct completely removed so 0 backlogs exist.
 export function generateSynapseSchedule(): DaySchedule[] {
   const days: DaySchedule[] = [];
-  const startDate = new Date(2026, 9, 11); // Oct 11, 2026 (Sunday)
+  const startDate = new Date(2026, 9, 13); // Tue 13 Oct 2026
 
   for (let i = 0; i < 107; i++) {
     const curDate = new Date(startDate);
-    curDate.setDate(startDate.getDate() + i);
+    // 13 Oct + 105 days is 26 Jan 2027 (Tuesday)
+    // Day 106 and Day 107 form the final Republic Day double-mock sprint
+    const dayOffset = Math.min(i, 105);
+    curDate.setDate(startDate.getDate() + dayOffset);
 
     const dayNum = i + 1;
-    const dayOfWeek = curDate.getDay(); // 0 = Sun ... 6 = Sat
+    const dayOfWeek = curDate.getDay(); // 0 = Sun, 1 = Mon, 2 = Tue, 3 = Wed, 4 = Thu, 5 = Fri, 6 = Sat
     const dateStr = formatDate(curDate);
     const fullDateStr = formatFullDate(curDate);
     const isoDate = curDate.toISOString().split('T')[0];
 
     let sequence: Subject[] = [];
     let routineName = '';
-    let routineType: 'sun' | 'mwf' | 'tts' | 'mock' = 'mwf';
+    let routineType: 'sun' | 'mwf' | 'tts' | 'mock' = 'tts';
 
-    // Day 105, 106, 107 are Full Length All-India Mock sprints
-    if (dayNum === 105) {
+    if (dayNum === 106) {
       routineType = 'mock';
       routineName = 'All-India Full Mock Exam 01';
       sequence = ['Physics', 'Chemistry', 'Zoology', 'Botany'];
-    } else if (dayNum === 106) {
-      routineType = 'mock';
-      routineName = 'All-India Full Mock Exam 02';
-      sequence = ['Physics', 'Chemistry', 'Zoology', 'Botany'];
     } else if (dayNum === 107) {
       routineType = 'mock';
-      routineName = 'Final Formula & Mindset Consolidation';
+      routineName = 'All-India Full Mock Exam 02 & Republic Day Grand Review';
       sequence = ['Physics', 'Chemistry', 'Zoology', 'Botany'];
     } else if (dayNum === 35 || dayNum === 70 || dayNum === 98) {
-      // Milestone review days
       routineType = 'mock';
       routineName = `Milestone Unit Assessment (Class ${dayNum < 50 ? '11 Part' : dayNum < 80 ? '11 Full' : '12 Full'})`;
       sequence = ['Physics', 'Chemistry', 'Zoology', 'Botany'];
     } else if (dayNum === 52 || dayNum === 66 || dayNum === 80 || dayNum === 94) {
-      // High-yield sprint day (6 slots)
       routineType = 'mock';
       routineName = 'NCERT Exemplar & Problem Acceleration';
       sequence = ['Physics', 'Chemistry', 'Zoology', 'Botany', 'Zoology', 'Botany'];
@@ -126,12 +125,12 @@ export function generateSynapseSchedule(): DaySchedule[] {
       routineName = 'Sunday Deep Routine (6 Slots)';
       sequence = ['Chemistry', 'Chemistry', 'Zoology', 'Zoology', 'Botany', 'Botany'];
     } else if (dayOfWeek === 1 || dayOfWeek === 3 || dayOfWeek === 5) {
-      // MWF: 8 slots (P -> P -> C -> Z -> B -> C -> C -> P)
+      // Mon, Wed, Fri: 8 slots (P -> P -> C -> Z -> B -> C -> C -> P)
       routineType = 'mwf';
       routineName = 'MWF Routine (8 Slots)';
       sequence = ['Physics', 'Physics', 'Chemistry', 'Zoology', 'Botany', 'Chemistry', 'Chemistry', 'Physics'];
     } else {
-      // TTS: 8 slots (P -> P -> C -> Z -> Z -> B -> C -> P)
+      // Tue, Thu, Sat: 8 slots (P -> P -> C -> Z -> Z -> B -> C -> P)
       routineType = 'tts';
       routineName = 'TTS Routine (8 Slots)';
       sequence = ['Physics', 'Physics', 'Chemistry', 'Zoology', 'Zoology', 'Botany', 'Chemistry', 'Physics'];
